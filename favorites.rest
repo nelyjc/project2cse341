@@ -1,0 +1,43 @@
+### Get all favorites
+GET http://localhost:7000/favorites
+Content-Type: application/json
+
+###
+
+### Get a single favorite by ID
+GET http://localhost:7000/favorites/
+Content-Type: application/json
+
+###
+
+### Create a new favorite
+POST http://localhost:7000/favorites
+Content-Type: application/json
+
+{
+  "firstName": "Nely",
+  "lastName": "Crespin",
+  "favoriteFood": "Tacos",
+  "favoriteColor": "Lavender",
+  "favoriteSong": "Shallow",
+  "favoriteMovie": "Encanto",
+  "favoriteHobby": "Decorating",
+  "birthday": "1990-07-10"
+}
+
+###
+
+### Update a favorite
+PUT http://localhost:7000/favorites/
+Content-Type: application/json
+
+{
+  "favoriteColor": "Pink",
+  "favoriteSong": "Someone Like You"
+}
+
+###
+
+### Delete a favorite
+DELETE http://localhost:7000/favorites/
+Content-Type: application/json

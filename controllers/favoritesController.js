@@ -1,56 +1,53 @@
-// controllers/favoritesController.js
-const FavoriteThings = require('../models/favoriteThingsModel');
-const ObjectId = require('mongoose').Types.ObjectId;
+const Favorite = require('../models/FavoritesModel'); 
 
-// GET all
-const getAll = async (req, res) => {
+
+// GET all favorites
+const getAllFavorites = async (req, res) => {
   try {
-    const people = await FavoriteThings.find();
-    res.status(200).json(people);
+    const favorites = await Favorite.find();
+    res.status(200).json(favorites);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// GET one
-const getOne = async (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
-    return res.status(400).json({ error: 'Invalid ID format' });
-
+// GET one by itemId
+const getFavoriteById = async (req, res) => {
   try {
-    const person = await FavoriteThings.findById(req.params.id);
-    if (!person)
-      return res.status(404).json({ message: 'Person not found' });
-    res.status(200).json(person);
+    const favorite = await Favorite.findOne({ itemId: req.params.id });
+
+    if (!favorite) {
+      return res.status(404).json({ message: "Favorite not found" });
+    }
+
+    res.status(200).json(favorite);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// CREATE
-const createPerson = async (req, res) => {
+const createFavorite = async (req, res) => {
   try {
-    const person = new FavoriteThings(req.body);
-    const result = await person.save();
-    res.status(201).json(result);
+    const favorite = new Favorite(req.body); // itemId will auto-assign
+    const savedFavorite = await favorite.save();
+    res.status(201).json(savedFavorite);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: 'Failed to create favorite', error: err.message });
   }
 };
 
-// UPDATE
-const updatePerson = async (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
-    return res.status(400).json({ error: 'Invalid ID format' });
-
+// UPDATE favorite
+const updateFavorite = async (req, res) => {
   try {
-    const updated = await FavoriteThings.findByIdAndUpdate(
-      req.params.id,
+    const updated = await Favorite.findOneAndUpdate(
+      { itemId: req.params.id },
       req.body,
-      { new: true, runValidators: true }
+      { new: true }
     );
-    if (!updated)
-      return res.status(404).json({ message: 'Person not found' });
+
+    if (!updated) {
+      return res.status(404).json({ message: "Favorite not found" });
+    }
 
     res.status(200).json(updated);
   } catch (err) {
@@ -58,20 +55,25 @@ const updatePerson = async (req, res) => {
   }
 };
 
-// DELETE
-const deletePerson = async (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
-    return res.status(400).json({ error: 'Invalid ID format' });
-
+// DELETE favorite
+const deleteFavorite = async (req, res) => {
   try {
-    const deleted = await FavoriteThings.findByIdAndDelete(req.params.id);
-    if (!deleted)
-      return res.status(404).json({ message: 'Person not found' });
+    const deleted = await Favorite.findOneAndDelete({ itemId: req.params.id });
 
-    res.status(200).json({ message: 'Deleted successfully' });
+    if (!deleted) {
+      return res.status(404).json({ message: "Favorite not found" });
+    }
+
+    res.status(200).json({ message: "Favorite deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-module.exports = { getAll, getOne, createPerson, updatePerson, deletePerson };
+module.exports = {
+  getAllFavorites,
+  getFavoriteById,
+  createFavorite,
+  updateFavorite,
+  deleteFavorite
+};

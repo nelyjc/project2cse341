@@ -1,23 +1,30 @@
 // routes/favoritesRoute.js
-const router = require('express').Router();
-const controller = require('../controllers/favoriteThingsController');
-const validate = require('../middleware/validate');
+const express = require("express");
+const router = express.Router();
+const favoritesController = require("../controllers/favoritesController");
+// const { favoriteValidationRules, validateFavorite } = require("../middleware/validate");
+const validate = require("../middleware/validate");
 
-const rules = {
-  firstName: 'required|string',
-  lastName: 'required|string',
-  favoriteFood: 'string',
-  favoriteColor: 'string',
-  favoriteSong: 'string',
-  favoriteMovie: 'string',
-  favoriteHobby: 'string',
-  birthday: 'date'
+
+// Validation rules
+const favoriteValidationRules = {
+  title: 'required|string|max:100',
+  url: 'required|url',
 };
 
-router.get('/', controller.getAll);
-router.get('/:id', controller.getOne);
-router.post('/', validate(rules), controller.createPerson);
-router.put('/:id', validate(rules), controller.updatePerson);
-router.delete('/:id', controller.deletePerson);
+// GET all
+router.get("/", favoritesController.getAllFavorites);
+
+// GET one
+router.get("/:id", favoritesController.getFavoriteById);
+
+// CREATE
+router.post("/", validate(favoriteValidationRules), favoritesController.createFavorite);
+
+// UPDATE
+router.put("/:id", validate(favoriteValidationRules), favoritesController.updateFavorite);
+
+// DELETE
+router.delete("/:id", favoritesController.deleteFavorite);
 
 module.exports = router;
