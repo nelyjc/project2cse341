@@ -1,5 +1,5 @@
 // controllers/favoritesController.js
-const Favorites = require('../models/favoritesModel');
+const Favorites = require('../models/favoriteModel');
 
 // GET all favorites
 const getAllFavorites = async (req, res) => {
