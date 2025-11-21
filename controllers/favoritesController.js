@@ -1,4 +1,5 @@
-const Favorite = require('../models/FavoritesModel'); 
+const FavoritesModel = require('../models/FavoritesModel');
+
 
 
 // GET all favorites
