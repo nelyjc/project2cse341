@@ -1,0 +1,88 @@
+#############################################
+# FAVORITES API TESTS
+#############################################
+
+### Get all favorites
+GET http://localhost:7000/favorites
+
+
+### Get ONE favorite by ID
+GET http://localhost:7000/favorites/{{favoriteId}}
+
+
+### Create a new favorite
+POST http://localhost:7000/favorites
+Content-Type: application/json
+
+{
+  "firstName": "Nely",
+  "lastName": "Crespin",
+  "favoriteFood": "Tacos",
+  "favoriteColor": "Blue",
+  "favoriteSong": "Shallow",
+  "favoriteMovie": "Encanto",
+  "favoriteHobby": "Decorating",
+  "birthday": "1990-07-10"
+}
+
+
+### Update a favorite
+PUT http://localhost:7000/favorites/{{favoriteId}}
+Content-Type: application/json
+
+{
+  "firstName": "Nely Updated",
+  "lastName": "Crespin",
+  "favoriteFood": "Tamales",
+  "favoriteColor": "Purple",
+  "favoriteSong": "Shallow",
+  "favoriteMovie": "Moana",
+  "favoriteHobby": "Painting",
+  "birthday": "1990-07-10"
+}
+
+
+### Delete a favorite
+DELETE http://localhost:7000/favorites/{{favoriteId}}
+
+
+#############################################
+# USER API TESTS
+#############################################
+
+### Get all users
+GET http://localhost:7000/user
+
+
+### Get ONE user by ID
+GET http://localhost:7000/user/{{userId}}
+
+
+### Create a user
+POST http://localhost:7000/user
+Content-Type: application/json
+
+{
+  "username": "Melvin123",
+  "firstName": "Melvin",
+  "lastName": "Crespin",
+  "email": "Melvin@email.com",
+  "age": 25
+}
+
+
+### Update a user
+PUT http://localhost:7000/user/{{userId}}
+Content-Type: application/json
+
+{
+  "username": "CarlosUpdated",
+  "firstName": "Carlos",
+  "lastName": "Crespin",
+  "email": "carlos@email.com",
+  "age": 36
+}
+
+
+### Delete a user
+DELETE http://localhost:7000/user/{{userId}}

@@ -1,31 +1,26 @@
 // data/database.js
-const MongoClient = require('mongodb').MongoClient;
-let database;
+require('dotenv').config();
+const { MongoClient } = require('mongodb');
 
-const initDb = (callback) => {
-  if (database) {
-    console.log('Database is already initialized!');
-    return callback(null, database);
+const uri = process.env.MONGODB_URI; 
+if (!uri) throw new Error('MongoDB URI is not defined in .env');
+
+let db;
+
+const initDb = async () => {
+  try {
+    const client = new MongoClient(uri);
+    await client.connect();
+    db = client.db(); // default DB from URI
+    console.log('✅ MongoDB native driver connected');
+  } catch (err) {
+    console.error('❌ Failed to connect with native driver:', err);
   }
-  MongoClient.connect(process.env.MONGODB_URI)
-    .then((client) => {
-      database = client;
-      console.log('Connected to MongoDB');
-      callback(null, database);
-    })
-    .catch((err) => {
-      callback(err);
-    });
 };
 
 const getDb = () => {
-  if (!database) {
-    throw new Error('Database not initialized');
-  }
-  return database;
+  if (!db) throw new Error('Database not initialized');
+  return db;
 };
 
-module.exports = {
-  initDb,
-  getDb
-};
+module.exports = { initDb, getDb };

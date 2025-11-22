@@ -1,0 +1,232 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Favorites & User API",
+    "description": "API for managing favorite things and user profiles",
+    "version": "1.0.0"
+  },
+  "host": "localhost:7000",
+  "basePath": "/",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+
+  "paths": {
+    "/favorites": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Get all favorites",
+        "responses": {
+          "200": {
+            "description": "List of favorites",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Favorite" }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Favorites"],
+        "summary": "Create a new favorite",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Favorite",
+            "required": true,
+            "schema": { "$ref": "#/definitions/FavoriteInput" }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Favorite created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+
+    "/favorites/{id}": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Get favorite by ID",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Favorite found",
+            "schema": { "$ref": "#/definitions/Favorite" }
+          },
+          "404": { "description": "Favorite not found" }
+        }
+      },
+      "put": {
+        "tags": ["Favorites"],
+        "summary": "Update favorite",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          {
+            "in": "body",
+            "name": "Favorite",
+            "required": true,
+            "schema": { "$ref": "#/definitions/FavoriteInput" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Favorite updated" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Favorites"],
+        "summary": "Delete favorite",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Favorite deleted" },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/User" }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User"],
+        "summary": "Create a new user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "User",
+            "required": true,
+            "schema": { "$ref": "#/definitions/UserInput" }
+          }
+        ],
+        "responses": {
+          "201": { "description": "User created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+
+    "/user/{id}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user by ID",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "404": { "description": "User not found" }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          {
+            "in": "body",
+            "name": "User",
+            "required": true,
+            "schema": { "$ref": "#/definitions/UserInput" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "User updated" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete user",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "User deleted" },
+          "404": { "description": "User not found" }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "Favorite": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string", "example": "6920b551f734bb3783b35e95" },
+        "firstName": { "type": "string", "example": "Nely" },
+        "lastName": { "type": "string", "example": "Crespin" },
+        "favoriteFood": { "type": "string", "example": "Tacos" },
+        "favoriteColor": { "type": "string", "example": "Lavender" },
+        "favoriteSong": { "type": "string", "example": "Shallow" },
+        "favoriteMovie": { "type": "string", "example": "Encanto" },
+        "favoriteHobby": { "type": "string", "example": "Decorating" },
+        "birthday": { "type": "string", "format": "date", "example": "1990-07-10" }
+      }
+    },
+
+    "FavoriteInput": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "favoriteFood",
+        "favoriteSong",
+        "favoriteMovie",
+        "favoriteHobby"
+      ],
+      "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "favoriteFood": { "type": "string" },
+        "favoriteColor": { "type": "string" },
+        "favoriteSong": { "type": "string" },
+        "favoriteMovie": { "type": "string" },
+        "favoriteHobby": { "type": "string" },
+        "birthday": { "type": "string", "format": "date" }
+      }
+    },
+
+    "User": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string", "example": "691278abc93bbb33e8" },
+        "username": { "type": "string", "example": "Carlos" },
+        "firstName": { "type": "string", "example": "Carlos" },
+        "lastName": { "type": "string", "example": "Crespin" },
+        "email": { "type": "string", "example": "carlos@email.com" },
+        "age": { "type": "number", "example": 35 }
+      }
+    },
+
+    "UserInput": {
+      "type": "object",
+      "required": ["firstName", "lastName", "email"],
+      "properties": {
+        "username": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" },
+        "age": { "type": "number" }
+      }
+    }
+  }
+}
