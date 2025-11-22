@@ -7,7 +7,7 @@ GET http://localhost:7000/favorites
 
 
 ### Get ONE favorite by ID
-GET http://localhost:7000/favorites/{{favoriteId}}
+GET http://localhost:7000/favorites/favoriteId
 
 
 ### Create a new favorite
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 
 ### Update a favorite
-PUT http://localhost:7000/favorites/{{favoriteId}}
+PUT http://localhost:7000/favorites/favoriteId
 Content-Type: application/json
 
 {
@@ -43,7 +43,7 @@ Content-Type: application/json
 
 
 ### Delete a favorite
-DELETE http://localhost:7000/favorites/{{favoriteId}}
+DELETE http://localhost:7000/favorites/favoriteId
 
 
 #############################################
@@ -55,7 +55,7 @@ GET http://localhost:7000/user
 
 
 ### Get ONE user by ID
-GET http://localhost:7000/user/{{userId}}
+GET http://localhost:7000/user/userId
 
 
 ### Create a user
@@ -72,7 +72,7 @@ Content-Type: application/json
 
 
 ### Update a user
-PUT http://localhost:7000/user/{{userId}}
+PUT http://localhost:7000/user/userId
 Content-Type: application/json
 
 {
@@ -85,4 +85,4 @@ Content-Type: application/json
 
 
 ### Delete a user
-DELETE http://localhost:7000/user/{{userId}}
+DELETE http://localhost:7000/user/userId
