@@ -15,14 +15,14 @@ POST http://localhost:7000/favorites
 Content-Type: application/json
 
 {
-  "firstName": "Nely",
-  "lastName": "Crespin",
-  "favoriteFood": "Tacos",
-  "favoriteColor": "Blue",
-  "favoriteSong": "Shallow",
-  "favoriteMovie": "Encanto",
-  "favoriteHobby": "Decorating",
-  "birthday": "1990-07-10"
+  "firstName": "Nelys",
+  "lastName": "",
+  "favoriteFood": "Tacoss",
+  "favoriteColor": "Blues",
+  "favoriteSong": "Hello",
+  "favoriteMovie": "Encantos",
+  "favoriteHobby": "Decoratings",
+  "birthday": "1990-07-11"
 }
 
 
@@ -63,11 +63,11 @@ POST http://localhost:7000/user
 Content-Type: application/json
 
 {
-  "username": "Melvin123",
-  "firstName": "Melvin",
-  "lastName": "Crespin",
-  "email": "Melvin@email.com",
-  "age": 25
+  "username": "Melvin13",
+  "firstName": "Melvins",
+  "lastName": "Crespins",
+  "email": "Melvins@email.com",
+  "age": 26
 }
 
 
