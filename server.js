@@ -11,6 +11,7 @@ const swaggerDocument = require('./swagger.json');
 
 
 const app = express();
+const port = process.env.PORT || 7000;
 
 // Connect to MongoDB
 connectDB();
@@ -40,7 +41,9 @@ process.on('uncaughtException', (err) => {
 });
 
 // Start server
-const port = process.env.PORT || 7000;
+
+// Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
