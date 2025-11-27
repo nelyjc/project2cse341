@@ -68,3 +68,4 @@ module.exports = {
   updateFavorite,
   deleteFavorite,
 };
+// End of controllers/favoritesController.js
