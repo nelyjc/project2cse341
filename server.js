@@ -34,13 +34,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 
-// Global error handler for uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error('Caught Exception:', err);
-  process.exit(1);
-});
+// // Global error handler for uncaught exceptions
+// process.on('uncaughtException', (err) => {
+//   console.error('Caught Exception:', err);
+//   process.exit(1);
+// });
 
-// Start server
 
 // Start server
 app.listen(port, () => {
