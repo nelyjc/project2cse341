@@ -1,4 +1,4 @@
-// models/FavoritesModel.js
+// models/FavoritesModel_temp.js
 const mongoose = require('mongoose');
 
 const favoriteSchema = new mongoose.Schema({
