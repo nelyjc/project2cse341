@@ -1,4 +1,7 @@
+// controllers/userController.js
+
 const User = require('../models/UserModel');
+const { validationResult } = require('express-validator');
 
 // GET all users
 const getAllUsers = async (req, res) => {
@@ -15,7 +18,9 @@ const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.status(200).json(user);
   } catch (err) {
@@ -25,6 +30,12 @@ const getUserById = async (req, res) => {
 
 // CREATE a user
 const createUser = async (req, res) => {
+  // Handle validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   try {
     const newUser = new User(req.body);
     const saved = await newUser.save();
@@ -36,6 +47,12 @@ const createUser = async (req, res) => {
 
 // UPDATE a user
 const updateUser = async (req, res) => {
+  // Handle validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   try {
     const updated = await User.findByIdAndUpdate(
       req.params.id,
@@ -43,7 +60,9 @@ const updateUser = async (req, res) => {
       { new: true }
     );
 
-    if (!updated) return res.status(404).json({ message: "User not found" });
+    if (!updated) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.status(200).json(updated);
   } catch (err) {
@@ -56,7 +75,9 @@ const deleteUser = async (req, res) => {
   try {
     const deleted = await User.findByIdAndDelete(req.params.id);
 
-    if (!deleted) return res.status(404).json({ message: "User not found" });
+    if (!deleted) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.status(200).json({ message: "User deleted" });
   } catch (err) {
@@ -69,5 +90,5 @@ module.exports = {
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
 };

@@ -1,5 +1,6 @@
 // controllers/favoritesController.js
 const Favorites = require('../models/FavoritesModel_temp');
+const { validationResult } = require('express-validator');
 
 // GET all favorites
 const getAllFavorites = async (req, res) => {
@@ -26,6 +27,11 @@ const getFavoriteById = async (req, res) => {
 
 // CREATE a new favorite
 const createFavorite = async (req, res) => {
+  const errors = validationResult(req);       // <--- check validation
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   try {
     const favorite = new Favorites(req.body);
     const savedFavorite = await favorite.save();
@@ -37,6 +43,11 @@ const createFavorite = async (req, res) => {
 
 // UPDATE favorite by itemId (_id)
 const updateFavorite = async (req, res) => {
+  const errors = validationResult(req);       // <--- check validation
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   try {
     const updated = await Favorites.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updated) {
@@ -68,4 +79,3 @@ module.exports = {
   updateFavorite,
   deleteFavorite,
 };
-// End of controllers/favoritesController.js

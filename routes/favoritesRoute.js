@@ -1,25 +1,22 @@
 const express = require('express');
 const router = express.Router();
-
-const validate = require('../middleware/validate');
-
 const favoritesController = require('../controllers/favoritesController');
-const validateFavorite = require('../middleware/favoriteValidationRules');
-const favoriteValidationRules = require('../middleware/favoriteValidationRules');
+const { isAuthenticated } = require('../middleware/authenticate');
+const favoriteValidationRules = require('../middleware/favoriteValidationRules'); 
 
-// GET all favorites
-router.get('/', favoritesController.getAllFavorites);
+// GET all favorites (protected)
+router.get('/', isAuthenticated, favoritesController.getAllFavorites);
 
-// GET one favorite by itemId (_id)
-router.get('/:id', favoritesController.getFavoriteById);
+// GET one favorite by ID (protected)
+router.get('/:id', isAuthenticated, favoritesController.getFavoriteById);
 
-// CREATE a new favorite
-router.post('/', validate(favoriteValidationRules), favoritesController.createFavorite);
+// CREATE a new favorite (protected + validation)
+router.post('/', isAuthenticated, favoriteValidationRules, favoritesController.createFavorite);
 
-// UPDATE favorite by itemId (_id)
-router.put('/:id', validate(favoriteValidationRules), favoritesController.updateFavorite);
+// UPDATE favorite by ID (protected + validation)
+router.put('/:id', isAuthenticated, favoriteValidationRules, favoritesController.updateFavorite);
 
-// DELETE favorite by itemId (_id)
-router.delete('/:id', favoritesController.deleteFavorite);
+// DELETE favorite by ID (protected)
+router.delete('/:id', isAuthenticated, favoritesController.deleteFavorite);
 
 module.exports = router;

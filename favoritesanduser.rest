@@ -15,14 +15,14 @@ POST http://localhost:7000/favorites
 Content-Type: application/json
 
 {
-  "firstName": "Nelys",
-  "lastName": "",
-  "favoriteFood": "Tacoss",
-  "favoriteColor": "Blues",
-  "favoriteSong": "Hello",
-  "favoriteMovie": "Encantos",
-  "favoriteHobby": "Decoratings",
-  "birthday": "1990-07-11"
+  "firstName": "asdfa",
+  "lastName": "asdfa",
+  "favoriteFood": "Tsfass",
+  "favoriteColor": "Bas",
+  "favoriteSong": "Helasflo",
+  "favoriteMovie": "Eafsdntos",
+  "favoriteHobby": "Dsafsdatings",
+  "birthday": "1990-06-11"
 }
 
 
