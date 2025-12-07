@@ -31,22 +31,24 @@ const getReviewById = async (req, res) => {
   }
 };
 
-const createReview = async (req, res) => {
+ const createReview = async (req, res) => {
   try {
     const review = {
-      ...req.body,
-      userId: req.user.id
+      userId: req.user.id,  
+      itemType: req.body.itemType,
+      itemName: req.body.itemName,
+      rating: req.body.rating,
+      comment: req.body.comment
     };
 
-    const response = await mongodb.getDatabase().db()
-      .collection('reviews')
-      .insertOne(review);
+    const result = await mongodb.getDatabase().db().collection("reviews").insertOne(review);
 
-    res.status(201).json({ message: "Review created", id: response.insertedId });
+    res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ message: "Error creating review", error });
+    res.status(500).json({ error: error.message });
   }
 };
+
 
 const updateReview = async (req, res) => {
   try {

@@ -34,17 +34,18 @@ const getActivityById = async (req, res) => {
 const createActivity = async (req, res) => {
   try {
     const activity = {
-      ...req.body,
-      userId: req.user.id
+      userId: req.user.id,   
+      eventName: req.body.eventName,
+      eventDate: req.body.eventDate,
+      location: req.body.location,
+      description: req.body.description
     };
 
-    const response = await mongodb.getDatabase().db()
-      .collection('activities')
-      .insertOne(activity);
+    const result = await mongodb.getDatabase().db().collection("activities").insertOne(activity);
 
-    res.status(201).json({ message: "Activity created", id: response.insertedId });
+    res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ message: "Error creating activity", error });
+    res.status(500).json({ error: error.message });
   }
 };
 
