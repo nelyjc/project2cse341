@@ -13,4 +13,5 @@ function validate(rules) {
   };
 }
 
+
 module.exports = validate;

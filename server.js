@@ -5,6 +5,8 @@ const cors = require('cors');
 const connectDB = require('./data/connection');
 const favoritesRoutes = require('./routes/favoritesRoute');
 const userRoute = require('./routes/userRoute');
+const activitiesRoutes = require('./routes/activitiesRoute');
+const reviewsRoute = require('./routes/reviewsRoute');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const session = require('express-session');
@@ -19,7 +21,13 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://project2cse341.onrender.com",
+    credentials: true
+  })
+);
+
 
 // ----------------------------------------
 // SESSION SETUP (for OAuth)
@@ -98,9 +106,20 @@ app.get('/logout', (req, res) => {
 // API Routes
 app.use('/favorites', favoritesRoutes);
 app.use('/user', userRoute);
+app.use('/activities', activitiesRoutes);
+app.use('/reviews', reviewsRoute);
 
-// Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      withCredentials: true
+    }
+  })
+);
+
 
 // Start server
 app.listen(port, () => {

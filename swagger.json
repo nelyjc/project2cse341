@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Favorites & User API",
-    "description": "API for managing favorite things and user profiles with GitHub OAuth authentication",
+    "title": "Users, Favorites, Activities & Reviews API",
+    "description": "API with GitHub OAuth authentication",
     "version": "1.0.0"
   },
   "host": "project2cse341.onrender.com",
@@ -15,7 +15,7 @@
     "github_oauth": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "authorizationUrl": "https://project2cse341.onrender.com/auth/github",
       "scopes": {
         "user:email": "Access your GitHub email"
       }
@@ -23,136 +23,6 @@
   },
 
   "paths": {
-    "/auth/github": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Login with GitHub OAuth",
-        "description": "Redirects the user to GitHub OAuth login page.",
-        "responses": {
-          "302": { "description": "Redirect to GitHub login" }
-        }
-      }
-    },
-
-    "/auth/github/callback": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "GitHub OAuth callback",
-        "responses": {
-          "200": { "description": "User logged in successfully (redirects to /)" },
-          "401": { "description": "Authentication failed" }
-        }
-      }
-    },
-
-    "/logout": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Logout user",
-        "responses": {
-          "200": { "description": "User logged out" }
-        }
-      }
-    },
-
-    "/favorites": {
-      "get": {
-        "tags": ["Favorites"],
-        "summary": "Get all favorites (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of favorites",
-            "schema": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/Favorite" }
-            }
-          },
-          "401": { "description": "Unauthorized - login required" }
-        }
-      },
-      "post": {
-        "tags": ["Favorites"],
-        "summary": "Create a new favorite (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "Favorite",
-            "required": true,
-            "schema": { "$ref": "#/definitions/FavoriteInput" }
-          }
-        ],
-        "responses": {
-          "201": { "description": "Favorite created" },
-          "422": { "description": "Validation error" },
-          "401": { "description": "Unauthorized" }
-        }
-      }
-    },
-
-    "/favorites/{id}": {
-      "get": {
-        "tags": ["Favorites"],
-        "summary": "Get favorite by ID (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
-        "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
-        ],
-        "responses": {
-          "200": {
-            "description": "Favorite found",
-            "schema": { "$ref": "#/definitions/Favorite" }
-          },
-          "404": { "description": "Favorite not found" },
-          "401": { "description": "Unauthorized" }
-        }
-      },
-      "put": {
-        "tags": ["Favorites"],
-        "summary": "Update favorite (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
-        "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" },
-          {
-            "in": "body",
-            "name": "Favorite",
-            "required": true,
-            "schema": { "$ref": "#/definitions/FavoriteInput" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Favorite updated" },
-          "404": { "description": "Not found" },
-          "422": { "description": "Validation error" },
-          "401": { "description": "Unauthorized" }
-        }
-      },
-      "delete": {
-        "tags": ["Favorites"],
-        "summary": "Delete favorite (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
-        "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
-        ],
-        "responses": {
-          "200": { "description": "Favorite deleted" },
-          "404": { "description": "Not found" },
-          "401": { "description": "Unauthorized" }
-        }
-      }
-    },
-
     "/user": {
       "get": {
         "tags": ["User"],
@@ -170,21 +40,17 @@
       "post": {
         "tags": ["User"],
         "summary": "Create a new user (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
+        "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
           {
             "in": "body",
             "name": "User",
-            "required": true,
             "schema": { "$ref": "#/definitions/UserInput" }
           }
         ],
         "responses": {
           "201": { "description": "User created" },
-          "422": { "description": "Validation error" },
-          "401": { "description": "Unauthorized" }
+          "422": { "description": "Validation failed" }
         }
       }
     },
@@ -197,100 +63,273 @@
           { "in": "path", "name": "id", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "User found",
-            "schema": { "$ref": "#/definitions/User" }
-          },
+          "200": { "description": "User found", "schema": { "$ref": "#/definitions/User" } },
           "404": { "description": "User not found" }
         }
       },
       "put": {
         "tags": ["User"],
         "summary": "Update user (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
+        "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
           { "in": "path", "name": "id", "required": true, "type": "string" },
-          {
-            "in": "body",
-            "name": "User",
-            "required": true,
-            "schema": { "$ref": "#/definitions/UserInput" }
-          }
+          { "in": "body", "name": "User", "schema": { "$ref": "#/definitions/UserInput" } }
         ],
         "responses": {
           "200": { "description": "User updated" },
-          "404": { "description": "User not found" },
-          "422": { "description": "Validation error" },
-          "401": { "description": "Unauthorized" }
+          "404": { "description": "User not found" }
         }
       },
       "delete": {
         "tags": ["User"],
         "summary": "Delete user (protected)",
-        "security": [
-          { "github_oauth": ["user:email"] }
-        ],
+        "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
           { "in": "path", "name": "id", "required": true, "type": "string" }
         ],
         "responses": {
           "200": { "description": "User deleted" },
-          "404": { "description": "User not found" },
-          "401": { "description": "Unauthorized" }
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+
+    "/favorites": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Get all favorites (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "responses": {
+          "200": {
+            "description": "List of favorites",
+            "schema": { "type": "array", "items": { "$ref": "#/definitions/Favorite" } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Favorites"],
+        "summary": "Create a favorite (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Favorite",
+            "schema": { "$ref": "#/definitions/FavoriteInput" }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Favorite created" },
+          "422": { "description": "Validation failed" }
+        }
+      }
+    },
+
+    "/favorites/{id}": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Get favorite by ID (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Favorite found", "schema": { "$ref": "#/definitions/Favorite" } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "tags": ["Favorites"],
+        "summary": "Update favorite (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "Favorite", "schema": { "$ref": "#/definitions/FavoriteInput" } }
+        ],
+        "responses": {
+          "200": { "description": "Favorite updated" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Favorites"],
+        "summary": "Delete favorite (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Favorite deleted" },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+
+    "/activities": {
+      "get": {
+        "tags": ["Activities"],
+        "summary": "Get all activities",
+        "responses": {
+          "200": {
+            "description": "List of activities",
+            "schema": { "type": "array", "items": { "$ref": "#/definitions/Activity" } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Activities"],
+        "summary": "Create activity (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "body", "name": "Activity", "schema": { "$ref": "#/definitions/ActivityInput" } }
+        ],
+        "responses": {
+          "201": { "description": "Activity created" },
+          "422": { "description": "Validation failed" }
+        }
+      }
+    },
+
+    "/activities/{id}": {
+      "get": {
+        "tags": ["Activities"],
+        "summary": "Get activity by ID",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Activity found", "schema": { "$ref": "#/definitions/Activity" } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "tags": ["Activities"],
+        "summary": "Update activity (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "Activity", "schema": { "$ref": "#/definitions/ActivityInput" } }
+        ],
+        "responses": {
+          "200": { "description": "Activity updated" }
+        }
+      },
+      "delete": {
+        "tags": ["Activities"],
+        "summary": "Delete activity (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Activity deleted" }
+        }
+      }
+    },
+
+    "/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get all reviews",
+        "responses": {
+          "200": {
+            "description": "List of reviews",
+            "schema": { "type": "array", "items": { "$ref": "#/definitions/Review" } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reviews"],
+        "summary": "Create review (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "body", "name": "Review", "schema": { "$ref": "#/definitions/ReviewInput" } }
+        ],
+        "responses": {
+          "201": { "description": "Review created" },
+          "422": { "description": "Validation failed" }
+        }
+      }
+    },
+
+    "/reviews/{id}": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get review by ID",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Review found", "schema": { "$ref": "#/definitions/Review" } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "tags": ["Reviews"],
+        "summary": "Update review (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "Review", "schema": { "$ref": "#/definitions/ReviewInput" } }
+        ],
+        "responses": {
+          "200": { "description": "Review updated" }
+        }
+      },
+      "delete": {
+        "tags": ["Reviews"],
+        "summary": "Delete review (protected)",
+        "security": [{ "github_oauth": ["user:email"] }],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Review deleted" }
+        }
+      }
+    },
+
+    "/auth/github": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "GitHub OAuth login redirect",
+        "responses": {
+          "302": { "description": "Redirect to GitHub" }
+        }
+      }
+    },
+
+    "/auth/github/callback": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "GitHub OAuth callback",
+        "responses": {
+          "200": { "description": "Authenticated" },
+          "401": { "description": "Authentication failed" }
+        }
+      }
+    },
+
+    "/logout": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "responses": {
+          "200": { "description": "Logged out" }
         }
       }
     }
   },
 
   "definitions": {
-    "Favorite": {
-      "type": "object",
-      "properties": {
-        "_id": { "type": "string", "example": "6920b551f734bb3783b35e95" },
-        "firstName": { "type": "string", "example": "Nely" },
-        "lastName": { "type": "string", "example": "Crespin" },
-        "favoriteFood": { "type": "string", "example": "Tacos" },
-        "favoriteColor": { "type": "string", "example": "Lavender" },
-        "favoriteSong": { "type": "string", "example": "Shallow" },
-        "favoriteMovie": { "type": "string", "example": "Encanto" },
-        "favoriteHobby": { "type": "string", "example": "Decorating" },
-        "birthday": { "type": "string", "format": "date", "example": "1990-07-10" }
-      }
-    },
-
-    "FavoriteInput": {
-      "type": "object",
-      "required": [
-        "firstName",
-        "lastName",
-        "favoriteFood",
-        "favoriteSong",
-        "favoriteMovie",
-        "favoriteHobby"
-      ],
-      "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "favoriteFood": { "type": "string" },
-        "favoriteColor": { "type": "string" },
-        "favoriteSong": { "type": "string" },
-        "favoriteMovie": { "type": "string" },
-        "favoriteHobby": { "type": "string" },
-        "birthday": { "type": "string", "format": "date" }
-      }
-    },
-
     "User": {
       "type": "object",
       "properties": {
-        "_id": { "type": "string", "example": "691278abc93bbb33e8" },
-        "username": { "type": "string", "example": "Carlos" },
-        "firstName": { "type": "string", "example": "Carlos" },
-        "lastName": { "type": "string", "example": "Crespin" },
-        "email": { "type": "string", "example": "carlos@email.com" },
-        "age": { "type": "number", "example": 35 }
+        "_id": { "type": "string" },
+        "username": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" },
+        "age": { "type": "number" }
       }
     },
 
@@ -303,6 +342,86 @@
         "lastName": { "type": "string" },
         "email": { "type": "string" },
         "age": { "type": "number" }
+      }
+    },
+
+    "Favorite": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "userId": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "favoriteFood": { "type": "string" },
+        "favoriteColor": { "type": "string" },
+        "favoriteSong": { "type": "string" },
+        "favoriteMovie": { "type": "string" },
+        "favoriteHobby": { "type": "string" },
+        "birthday": { "type": "string" }
+      }
+    },
+
+    "FavoriteInput": {
+      "type": "object",
+      "required": ["firstName", "lastName", "favoriteFood", "favoriteSong", "favoriteMovie", "favoriteHobby"],
+      "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "favoriteFood": { "type": "string" },
+        "favoriteColor": { "type": "string" },
+        "favoriteSong": { "type": "string" },
+        "favoriteMovie": { "type": "string" },
+        "favoriteHobby": { "type": "string" },
+        "birthday": { "type": "string" }
+      }
+    },
+
+    "Activity": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "userId": { "type": "string" },
+        "eventName": { "type": "string" },
+        "eventDate": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+
+    "ActivityInput": {
+      "type": "object",
+      "required": ["eventName", "eventDate", "location"],
+      "properties": {
+        "eventName": { "type": "string" },
+        "eventDate": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+
+    "Review": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "userId": { "type": "string" },
+        "itemType": { "type": "string" },
+        "itemName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" }
+      }
+    },
+
+    "ReviewInput": {
+      "type": "object",
+      "required": ["itemType", "itemName", "rating"],
+      "properties": {
+        "itemType": {
+          "type": "string",
+          "enum": ["movie", "song", "book", "game", "show"]
+        },
+        "itemName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" }
       }
     }
   }

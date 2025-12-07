@@ -2,7 +2,7 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-const uri = process.env.MONGODB_URI; 
+const uri = process.env.MONGO_URI; 
 if (!uri) throw new Error('MongoDB URI is not defined in .env');
 
 let db;
