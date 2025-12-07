@@ -1,88 +1,184 @@
 #############################################
-# FAVORITES API TESTS
+# USERS TESTS
 #############################################
 
-### Get all favorites
-GET http://localhost:7000/favorites
-
-
-### Get ONE favorite by ID
-GET http://localhost:7000/favorites/favoriteId
-
-
-### Create a new favorite
-POST http://localhost:7000/favorites
-Content-Type: application/json
-
-{
-  "firstName": "asdfa",
-  "lastName": "asdfa",
-  "favoriteFood": "Tsfass",
-  "favoriteColor": "Bas",
-  "favoriteSong": "Helasflo",
-  "favoriteMovie": "Eafsdntos",
-  "favoriteHobby": "Dsafsdatings",
-  "birthday": "1990-06-11"
-}
-
-
-### Update a favorite
-PUT http://localhost:7000/favorites/favoriteId
-Content-Type: application/json
-
-{
-  "firstName": "Nely Updated",
-  "lastName": "Crespin",
-  "favoriteFood": "Tamales",
-  "favoriteColor": "Purple",
-  "favoriteSong": "Shallow",
-  "favoriteMovie": "Moana",
-  "favoriteHobby": "Painting",
-  "birthday": "1990-07-10"
-}
-
-
-### Delete a favorite
-DELETE http://localhost:7000/favorites/favoriteId
-
-
-#############################################
-# USER API TESTS
-#############################################
-
-### Get all users
+### Get ALL users
 GET http://localhost:7000/user
+Content-Type: application/json
 
+###
 
 ### Get ONE user by ID
-GET http://localhost:7000/user/userId
+GET http://localhost:7000/user/
+Content-Type: application/json
 
+###
 
-### Create a user
+### Create NEW user (no auth required for GET, but POST is protected)
 POST http://localhost:7000/user
 Content-Type: application/json
 
 {
-  "username": "Melvin13",
-  "firstName": "Melvins",
-  "lastName": "Crespins",
-  "email": "Melvins@email.com",
-  "age": 26
+  "username": "testUser",
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "test@example.com",
+  "age": 25
 }
 
+###
 
-### Update a user
-PUT http://localhost:7000/user/userId
+### UPDATE user
+PUT http://localhost:7000/user/
 Content-Type: application/json
 
 {
-  "username": "CarlosUpdated",
-  "firstName": "Carlos",
-  "lastName": "Crespin",
-  "email": "carlos@email.com",
-  "age": 36
+  "firstName": "Updated",
+  "lastName": "User",
+  "email": "updated@example.com"
 }
 
+###
 
-### Delete a user
-DELETE http://localhost:7000/user/userId
+### DELETE user
+DELETE http://localhost:7000/user/
+Content-Type: application/json
+
+
+#############################################
+# FAVORITES TESTS
+#############################################
+
+### Get ALL favorites
+GET http://localhost:7000/favorites
+Content-Type: application/json
+
+###
+
+### Get ONE favorite
+GET http://localhost:7000/favorites/
+Content-Type: application/json
+
+###
+
+### Create favorite (requires OAuth)
+POST http://localhost:7000/favorites
+Content-Type: application/json
+
+{
+  "firstName": "Nely",
+  "lastName": "Crespin",
+  "favoriteFood": "Tacos",
+  "favoriteColor": "Lavender",
+  "favoriteSong": "Shallow",
+  "favoriteMovie": "Moana",
+  "favoriteHobby": "Decorating",
+  "birthday": "1990-07-10"
+}
+
+###
+
+### UPDATE favorite
+PUT http://localhost:7000/favorites/
+Content-Type: application/json
+
+{
+  "favoriteFood": "Tamales",
+  "favoriteColor": "Purple"
+}
+
+###
+
+### DELETE favorite
+DELETE http://localhost:7000/favorites/
+Content-Type: application/json
+
+
+#############################################
+# ACTIVITIES TESTS
+#############################################
+
+### Get ALL activities
+GET http://localhost:7000/activities
+Content-Type: application/json
+
+###
+
+### Get ONE activity
+GET http://localhost:7000/activities/
+Content-Type: application/json
+
+###
+
+### Create NEW activity (requires OAuth)
+POST http://localhost:7000/activities
+Content-Type: application/json
+
+{
+  "eventName": "Birthday Party",
+  "eventDate": "2025-05-10",
+  "location": "Provo",
+  "description": "Family celebration"
+}
+
+###
+
+### UPDATE activity
+PUT http://localhost:7000/activities/
+Content-Type: application/json
+
+{
+  "location": "Orem",
+  "description": "Updated event description"
+}
+
+###
+
+### DELETE activity
+DELETE http://localhost:7000/activities/
+Content-Type: application/json
+
+
+#############################################
+# REVIEWS TESTS
+#############################################
+
+### Get ALL reviews
+GET http://localhost:7000/reviews
+Content-Type: application/json
+
+###
+
+### Get ONE review
+GET http://localhost:7000/reviews/
+Content-Type: application/json
+
+###
+
+### Create review (requires OAuth)
+POST http://localhost:7000/reviews
+Content-Type: application/json
+
+{
+  "itemType": "movie",
+  "itemName": "Encanto",
+  "rating": 5,
+  "comment": "Amazing movie!"
+}
+
+###
+
+### UPDATE review
+PUT http://localhost:7000/reviews/
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Updated comment"
+}
+
+###
+
+### DELETE review
+DELETE http://localhost:7000/reviews/
+Content-Type: application/json
