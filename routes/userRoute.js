@@ -7,10 +7,10 @@ const { isAuthenticated } = require('../middleware/authenticate');
 const userValidationRules = require('../middleware/userValidationRules');
 
 // GET all users
-router.get('/', isAuthenticated,userController.getAllUsers);
+router.get('/', userController.getAllUsers);
 
 // GET one user
-router.get('/:id', isAuthenticated, userController.getUserById);
+router.get('/:id', userController.getUserById);
 
 // CREATE user (authenticated + validated)
 router.post('/', isAuthenticated, userValidationRules, userController.createUser);

@@ -1,19 +1,16 @@
-//reviews/tests/reviews.test.js
+//test reviews.test.js
 const request = require("supertest");
-const app = "http://localhost:7000";
+const app = require("../server");
 
 describe("Reviews API", () => {
-  test("GET /reviews → should return all reviews", async () => {
+  test("GET /reviews → should return 200 OK", async () => {
     const res = await request(app).get("/reviews");
-
-    expect([200, 401]).toContain(res.statusCode);
+    expect(res.statusCode).toBe(200);
   });
 
-  test("GET /reviews/:id → should return one review", async () => {
-    const testId = "REPLACE_REVIEW_ID";
-
+  test("GET /reviews/:id → should return 200 OR 404", async () => {
+    const testId = "676abcd12345def678901234";
     const res = await request(app).get(`/reviews/${testId}`);
-
-    expect([200, 404, 401]).toContain(res.statusCode);
+    expect([200, 404]).toContain(res.statusCode);
   });
 });

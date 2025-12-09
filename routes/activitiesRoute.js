@@ -4,10 +4,10 @@ const router = express.Router();
 
 const activitiesController = require('../controllers/activitiesController');
 const { activityValidationRules, validate } = require('../middleware/activitiesValidation');
-const { isAuthenticated } = require('../middleware/authenticate');  // <-- IMPORTANT
+const { isAuthenticated } = require('../middleware/authenticate'); 
 
 // GET all activities
-router.get('/', isAuthenticated, activitiesController.getAllActivities);
+router.get('/', activitiesController.getAllActivities);
 
 // GET a single activity
 router.get('/:id', activitiesController.getActivityById);

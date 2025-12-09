@@ -1,98 +1,55 @@
-const mongodb = require('../data/database');
-const ObjectId = require('mongodb').ObjectId;
+const Review = require('../models/ReviewsModel');
 
-const getAllReviews = async (req, res) => {
+// GET all reviews
+exports.getAllReviews = async (req, res) => {
   try {
-    const result = await mongodb.getDatabase().db()
-      .collection('reviews')
-      .find({ userId: req.user.id });
-
-    const reviews = await result.toArray();
+    const reviews = await Review.find();
     res.status(200).json(reviews);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching reviews", error });
+    res.status(500).json({ message: error.message });
   }
 };
 
-const getReviewById = async (req, res) => {
+// GET one review
+exports.getReviewById = async (req, res) => {
   try {
-    const id = new ObjectId(req.params.id);
-
-    const review = await mongodb.getDatabase().db()
-      .collection('reviews')
-      .findOne({ _id: id, userId: req.user.id });
-
-    if (!review)
-      return res.status(404).json({ message: "Review not found" });
-
+    const review = await Review.findById(req.params.id);
+    if (!review) return res.status(404).json({ message: "Review not found" });
     res.status(200).json(review);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching review", error });
+    res.status(500).json({ message: error.message });
   }
 };
 
- const createReview = async (req, res) => {
+// CREATE review
+exports.createReview = async (req, res) => {
   try {
-    const review = {
-      userId: req.user.id,  
-      itemType: req.body.itemType,
-      itemName: req.body.itemName,
-      rating: req.body.rating,
-      comment: req.body.comment
-    };
-
-    const result = await mongodb.getDatabase().db().collection("reviews").insertOne(review);
-
-    res.status(201).json(result);
+    const newReview = new Review(req.body);
+    await newReview.save();
+    res.status(201).json(newReview);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-
-const updateReview = async (req, res) => {
+// UPDATE
+exports.updateReview = async (req, res) => {
   try {
-    const id = new ObjectId(req.params.id);
-
-    const updated = {
-      ...req.body,
-      userId: req.user.id
-    };
-
-    const response = await mongodb.getDatabase().db()
-      .collection('reviews')
-      .updateOne({ _id: id, userId: req.user.id }, { $set: updated });
-
-    if (response.matchedCount === 0)
-      return res.status(404).json({ message: "Review not found" });
-
-    res.status(200).json({ message: "Review updated" });
+    const updated = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updated) return res.status(404).json({ message: "Review not found" });
+    res.status(200).json(updated);
   } catch (error) {
-    res.status(500).json({ message: "Error updating review", error });
+    res.status(500).json({ message: error.message });
   }
 };
 
-const deleteReview = async (req, res) => {
+// DELETE
+exports.deleteReview = async (req, res) => {
   try {
-    const id = new ObjectId(req.params.id);
-
-    const response = await mongodb.getDatabase().db()
-      .collection('reviews')
-      .deleteOne({ _id: id, userId: req.user.id });
-
-    if (response.deletedCount === 0)
-      return res.status(404).json({ message: "Review not found" });
-
+    const deleted = await Review.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Review not found" });
     res.status(200).json({ message: "Review deleted" });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting review", error });
+    res.status(500).json({ message: error.message });
   }
-};
-
-module.exports = {
-  getAllReviews,
-  getReviewById,
-  createReview,
-  updateReview,
-  deleteReview
 };

@@ -5,10 +5,10 @@ const { isAuthenticated } = require('../middleware/authenticate');
 const favoriteValidationRules = require('../middleware/favoriteValidationRules'); 
 
 // GET all favorites (protected)
-router.get('/', isAuthenticated, favoritesController.getAllFavorites);
+router.get('/', favoritesController.getAllFavorites);
 
 // GET one favorite by ID (protected)
-router.get('/:id', isAuthenticated, favoritesController.getFavoriteById);
+router.get('/:id', favoritesController.getFavoriteById);
 
 // CREATE a new favorite (protected + validation)
 router.post('/', isAuthenticated, favoriteValidationRules, favoritesController.createFavorite);

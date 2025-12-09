@@ -1,19 +1,17 @@
-//test/activities.test.js
 const request = require("supertest");
-const app = "http://localhost:7000";
+const app = require("../server");
 
 describe("Activities API", () => {
-  test("GET /activities → should return all activities", async () => {
+
+  test("GET /activities → should return 200 OK (public route)", async () => {
     const res = await request(app).get("/activities");
-
-    expect([200, 401]).toContain(res.statusCode);
+    expect(res.statusCode).toBe(200);
   });
 
-  test("GET /activities/:id → should return one activity", async () => {
-    const testId = "REPLACE_ACTIVITY_ID";
-
+  test("GET /activities/:id → should return 200 or 404 (public route)", async () => {
+    const testId = "676abcd12345def67890123a"; // valid ObjectId format
     const res = await request(app).get(`/activities/${testId}`);
-
-    expect([200, 404, 401]).toContain(res.statusCode);
+    expect([200, 404]).toContain(res.statusCode);
   });
+
 });
