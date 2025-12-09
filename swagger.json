@@ -2,9 +2,10 @@
   "swagger": "2.0",
   "info": {
     "title": "Users, Favorites, Activities & Reviews API",
-    "description": "API with GitHub OAuth authentication",
+    "description": "Full API with GitHub OAuth authentication and validation",
     "version": "1.0.0"
   },
+
   "host": "project2cse341.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
@@ -60,7 +61,7 @@
         "tags": ["User"],
         "summary": "Get user by ID",
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "User found", "schema": { "$ref": "#/definitions/User" } },
@@ -69,10 +70,10 @@
       },
       "put": {
         "tags": ["User"],
-        "summary": "Update user (protected)",
+        "summary": "Update a user (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "path", "name": "id", "type": "string", "required": true },
           { "in": "body", "name": "User", "schema": { "$ref": "#/definitions/UserInput" } }
         ],
         "responses": {
@@ -82,10 +83,10 @@
       },
       "delete": {
         "tags": ["User"],
-        "summary": "Delete user (protected)",
+        "summary": "Delete a user (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "User deleted" },
@@ -97,12 +98,14 @@
     "/favorites": {
       "get": {
         "tags": ["Favorites"],
-        "summary": "Get all favorites (protected)",
-        "security": [{ "github_oauth": ["user:email"] }],
+        "summary": "Get all favorites",
         "responses": {
           "200": {
             "description": "List of favorites",
-            "schema": { "type": "array", "items": { "$ref": "#/definitions/Favorite" } }
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Favorite" }
+            }
           }
         }
       },
@@ -127,10 +130,9 @@
     "/favorites/{id}": {
       "get": {
         "tags": ["Favorites"],
-        "summary": "Get favorite by ID (protected)",
-        "security": [{ "github_oauth": ["user:email"] }],
+        "summary": "Get favorite by ID",
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "Favorite found", "schema": { "$ref": "#/definitions/Favorite" } },
@@ -142,7 +144,7 @@
         "summary": "Update favorite (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "path", "name": "id", "type": "string", "required": true },
           { "in": "body", "name": "Favorite", "schema": { "$ref": "#/definitions/FavoriteInput" } }
         ],
         "responses": {
@@ -155,7 +157,7 @@
         "summary": "Delete favorite (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "Favorite deleted" },
@@ -171,16 +173,23 @@
         "responses": {
           "200": {
             "description": "List of activities",
-            "schema": { "type": "array", "items": { "$ref": "#/definitions/Activity" } }
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Activity" }
+            }
           }
         }
       },
       "post": {
         "tags": ["Activities"],
-        "summary": "Create activity (protected)",
+        "summary": "Create an activity (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "body", "name": "Activity", "schema": { "$ref": "#/definitions/ActivityInput" } }
+          {
+            "in": "body",
+            "name": "Activity",
+            "schema": { "$ref": "#/definitions/ActivityInput" }
+          }
         ],
         "responses": {
           "201": { "description": "Activity created" },
@@ -194,7 +203,7 @@
         "tags": ["Activities"],
         "summary": "Get activity by ID",
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "Activity found", "schema": { "$ref": "#/definitions/Activity" } },
@@ -206,11 +215,16 @@
         "summary": "Update activity (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" },
-          { "in": "body", "name": "Activity", "schema": { "$ref": "#/definitions/ActivityInput" } }
+          { "in": "path", "name": "id", "type": "string", "required": true },
+          {
+            "in": "body",
+            "name": "Activity",
+            "schema": { "$ref": "#/definitions/ActivityInput" }
+          }
         ],
         "responses": {
-          "200": { "description": "Activity updated" }
+          "200": { "description": "Activity updated" },
+          "404": { "description": "Not found" }
         }
       },
       "delete": {
@@ -218,10 +232,11 @@
         "summary": "Delete activity (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
-          "200": { "description": "Activity deleted" }
+          "200": { "description": "Activity deleted" },
+          "404": { "description": "Not found" }
         }
       }
     },
@@ -233,16 +248,23 @@
         "responses": {
           "200": {
             "description": "List of reviews",
-            "schema": { "type": "array", "items": { "$ref": "#/definitions/Review" } }
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Review" }
+            }
           }
         }
       },
       "post": {
         "tags": ["Reviews"],
-        "summary": "Create review (protected)",
+        "summary": "Create a review (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "body", "name": "Review", "schema": { "$ref": "#/definitions/ReviewInput" } }
+          {
+            "in": "body",
+            "name": "Review",
+            "schema": { "$ref": "#/definitions/ReviewInput" }
+          }
         ],
         "responses": {
           "201": { "description": "Review created" },
@@ -256,7 +278,7 @@
         "tags": ["Reviews"],
         "summary": "Get review by ID",
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "Review found", "schema": { "$ref": "#/definitions/Review" } },
@@ -268,7 +290,7 @@
         "summary": "Update review (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "path", "name": "id", "type": "string", "required": true },
           { "in": "body", "name": "Review", "schema": { "$ref": "#/definitions/ReviewInput" } }
         ],
         "responses": {
@@ -280,7 +302,7 @@
         "summary": "Delete review (protected)",
         "security": [{ "github_oauth": ["user:email"] }],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "type": "string" }
+          { "in": "path", "name": "id", "type": "string", "required": true }
         ],
         "responses": {
           "200": { "description": "Review deleted" }
@@ -291,9 +313,9 @@
     "/auth/github": {
       "get": {
         "tags": ["Auth"],
-        "summary": "GitHub OAuth login redirect",
+        "summary": "Redirect to GitHub OAuth login",
         "responses": {
-          "302": { "description": "Redirect to GitHub" }
+          "302": { "description": "Redirecting to GitHub..." }
         }
       }
     },
@@ -303,7 +325,7 @@
         "tags": ["Auth"],
         "summary": "GitHub OAuth callback",
         "responses": {
-          "200": { "description": "Authenticated" },
+          "200": { "description": "Login successful" },
           "401": { "description": "Authentication failed" }
         }
       }
@@ -312,7 +334,7 @@
     "/logout": {
       "get": {
         "tags": ["Auth"],
-        "summary": "Logout",
+        "summary": "Logout user",
         "responses": {
           "200": { "description": "Logged out" }
         }
@@ -363,7 +385,14 @@
 
     "FavoriteInput": {
       "type": "object",
-      "required": ["firstName", "lastName", "favoriteFood", "favoriteSong", "favoriteMovie", "favoriteHobby"],
+      "required": [
+        "firstName",
+        "lastName",
+        "favoriteFood",
+        "favoriteSong",
+        "favoriteMovie",
+        "favoriteHobby"
+      ],
       "properties": {
         "firstName": { "type": "string" },
         "lastName": { "type": "string" },
