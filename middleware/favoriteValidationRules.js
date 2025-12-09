@@ -1,5 +1,4 @@
 // middleware favoriteValidationRules.js
-// This file defines the validation rules for the Favorite model
 const { body } = require('express-validator');
 
 const favoriteValidationRules = [

@@ -1,6 +1,4 @@
 // middleware/userValidationRules.js
-
-// middleware/userValidationRules.js
 const { body } = require('express-validator');
 
 const userValidationRules = [
